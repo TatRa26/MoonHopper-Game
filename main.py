@@ -12,6 +12,7 @@ game_state = "menu"
 sound_on = True
 game_over_timer = 0
 win_timer = 0
+last_result = None  # Показывать победу/поражение в меню
 
 button_start = Actor("button_start", center=(WIDTH // 2, 200))
 button_sound = Actor("button_sound", center=(WIDTH // 2, 300))
@@ -125,7 +126,7 @@ def reset_game():
             pass
 
 def win_game():
-    global game_state
+    global game_state, win_timer, last_result
     game_state = "win"
     win_timer = 120
     if sound_on:
@@ -138,6 +139,10 @@ def draw():
     screen.clear()
     background.draw()
     if game_state == "menu":
+        if last_result == "game_over":
+            screen.draw.text("You Lost!", center=(WIDTH // 2, 100), fontsize=48, color="red")
+        elif last_result == "win":
+            screen.draw.text("You Won!", center=(WIDTH // 2, 100), fontsize=48, color="yellow")
         button_start.draw()
         button_sound.draw()
         button_exit.draw()
