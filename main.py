@@ -11,6 +11,7 @@ background = Actor("background")
 game_state = "menu"
 sound_on = True
 game_over_timer = 0
+win_timer = 0
 
 button_start = Actor("button_start", center=(WIDTH // 2, 200))
 button_sound = Actor("button_sound", center=(WIDTH // 2, 300))
@@ -90,7 +91,20 @@ platforms = [
 star_seed = Actor("star_seed", center=(700, 330))
 
 def start_game():
-    global game_state
+    global game_state, hero, enemies, star_seed
+    # Сброс состояния героя
+    hero.x, hero.y = 100, 500
+    hero.vx, hero.vy = 0, 0
+    hero.on_ground = False
+
+    # Пересоздание врагов
+    enemies = [
+        Enemy(["enemy1", "enemy2", "enemy3"], (400, 500), 100),
+        Enemy(["enemy1", "enemy2", "enemy3"], (600, 400), 150),
+    ]
+
+    # Пересоздание звезды
+    star_seed = Actor("star_seed", center=(700, 330))
     game_state = "playing"
     if sound_on:
         try:
@@ -113,6 +127,7 @@ def reset_game():
 def win_game():
     global game_state
     game_state = "win"
+    win_timer = 120
     if sound_on:
         try:
             music.stop()
@@ -147,7 +162,7 @@ def draw():
         screen.draw.text("You Win!", center=(WIDTH // 2, HEIGHT // 2), fontsize=64, color="yellow")
 
 def update():
-    global game_state, game_over_timer
+    global game_state, game_over_timer, win_timer
     if game_state == "playing":
         hero.update()
         for enemy in enemies:
@@ -185,6 +200,11 @@ def update():
         game_over_timer -= 1
         if game_over_timer <= 0:
             game_state = "menu"
+    elif game_state == "win":
+        win_timer -= 1
+        if win_timer <= 0:
+            game_state = "menu"
+
 
 def on_mouse_down(pos):
     global sound_on
