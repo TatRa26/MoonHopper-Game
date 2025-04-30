@@ -165,6 +165,11 @@ def draw():
         screen.draw.text("Game Over", center=(WIDTH // 2, HEIGHT // 2), fontsize=64, color="red")
     elif game_state == "win":
         screen.draw.text("You Win!", center=(WIDTH // 2, HEIGHT // 2), fontsize=64, color="yellow")
+    elif game_state == "exit_screen":
+        screen.fill((173, 216, 230))  # light blue
+        screen.draw.text("Thanks for playing!", center=(WIDTH // 2, HEIGHT // 2 - 30), fontsize=48, color="darkblue")
+        screen.draw.text("You can close the window when you're ready.", center=(WIDTH // 2, HEIGHT // 2 + 30),
+                         fontsize=32, color="darkgreen")
 
 def update():
     global game_state, game_over_timer, win_timer
@@ -212,7 +217,7 @@ def update():
 
 
 def on_mouse_down(pos):
-    global sound_on
+    global sound_on, game_state
     if game_state == "menu":
         if button_start.collidepoint(pos):
             start_game()
@@ -229,15 +234,16 @@ def on_mouse_down(pos):
                 except:
                     print("Warning: background_music.mp3 not found")
         elif button_exit.collidepoint(pos):
-            pgzrun.quit()
+            game_state = "exit_screen"
 
 def on_key_down(key):
+    global game_state
     keys_held.add(key)
     if game_state == "playing":
         if key == keys.SPACE:
             hero.jump()
         elif key == keys.ESCAPE:
-            pgzrun.quit()
+            game_state = "exit_screen"
 
 def on_key_up(key):
     if key in keys_held:
