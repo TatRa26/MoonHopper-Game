@@ -126,6 +126,14 @@ def draw():
         button_start.draw()
         button_sound.draw()
         button_exit.draw()
+
+        screen.draw.text("Start", center=(button_start.centerx, button_start.centery - 40),
+                         fontsize=36, color="darkgreen")
+        sound_text = "Sound: On" if sound_on else "Sound: Off"
+        screen.draw.text(sound_text, center=(button_sound.centerx, button_sound.centery - 40),
+                         fontsize=36, color="darkgreen")
+        screen.draw.text("Exit", center=(button_exit.centerx, button_exit.centery - 40),
+                         fontsize=36, color="darkgreen")
     elif game_state == "playing":
         for plat in platforms:
             screen.draw.filled_rect(plat, (100, 100, 100))
